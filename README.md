@@ -1,7 +1,6 @@
 The main reason for this project is to provide an automated data pipeline that addresses real-world data engineering challenges. By leveraging publicly available data, we can create actionable insights, focusing on key performance indicators like total trips, revenue, and customer behavior.
 
 ## Pipeline Architecture
-![Pipeline Diagram](path/to/pipeline-diagram.png)
 ![Pipeline Diagram](images/Pipeline.png)
 
 The architecture includes:
@@ -11,15 +10,31 @@ The architecture includes:
 
 ## DBT Model
 ![DBT Model](path/to/dbt-image.png)
-![DBT Model](images/dbt-dag.png)
 
 The DBT model illustrates how staging and transformation tables are structured:
 - **Staging Tables**: `stg_green_tripdata`, `stg_yellow_tripdata`
-@@ -40,3 +40,85 @@ A Looker dashboard is utilized to visualize data insights, showcasing:
-```bash
-git clone <repository-url>
-cd NYC-Taxi-Data-Engineering
+- **Dimension Tables**: `dim_zones`
+- **Fact Table**: `fact_trips`
+- The final model `dm_monthly_zone_revenue` presents aggregated insights.
 
+## Dashboard Design
+A Looker dashboard is utilized to visualize data insights, showcasing:
+- **KPI Section**:
+  - Total Trips
+  - Total Revenue
+  - Total Tips
+  - Avg Fare
+  - Avg Trip Distance
+- **Trend Analysis**: Monthly trends in trips and revenue.
+- **Geographic Insights**: Heatmaps and bar charts for zone-based exploration.
+- **Customer Behavior**: Analysis of payment types and customer preferences.
+
+## Installation Instructions
+1. **Clone the Repository**: 
+   ```bash
+   git clone <repository-url>
+   cd NYC-Taxi-Data-Engineering
+   
 2. **Run Docker Containers:**:
    Use the `docker-compose up` command to instantiate the environment.
 
