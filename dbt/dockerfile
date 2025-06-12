@@ -1,0 +1,19 @@
+FROM python:3.9-slim
+
+# Install system dependencies required by dbt
+RUN apt-get update && \
+    apt-get install -y build-essential libpq-dev && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install DBT and DBT-Postgres
+RUN pip install dbt-core==1.8.2 dbt-postgres==1.8.2
+
+# Set working directory
+WORKDIR /usr/app
+
+# Copy your dbt project files into the container
+COPY . /usr/app
+
+# Set default DBT command (optional)
+CMD ["tail", "-f", "/dev/null"]

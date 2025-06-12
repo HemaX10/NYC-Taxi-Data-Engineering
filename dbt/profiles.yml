@@ -1,0 +1,22 @@
+dbt_project:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres
+      dbname: airflow
+      schema: datatalks
+      user: postgres
+      pass: postgres
+      port: 5432
+      threads: 1
+    prod:
+      type: postgres
+      host: postgres
+      dbname: airflow
+      schema: prod_datatalks
+      user: postgres
+      pass: postgres
+      port: 5432
+      threads: 1
+
