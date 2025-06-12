@@ -115,7 +115,7 @@ Utilizing Ngrok and materialized views offers a free and cost-effective way to h
 ### [Dashboard Link](https://lookerstudio.google.com/reporting/ce5a09b7-291b-4fdd-bcbb-57205ba2ee8b)
 
 ## Contact Information
-###For any Queries or any requsetes Do not hesitate to message me 
-##### [Twitter](https://x.com/hema_aymen55)
-##### [LinkedIn](https://www.linkedin.com/in/ibrahimayman10/)
-##### Email : ebrahimaymenzaki55@gmail.com
+### For any Queries or any requsetes Do not hesitate to message me 
+### [Twitter](https://x.com/hema_aymen55)
+### [LinkedIn](https://www.linkedin.com/in/ibrahimayman10/)
+### Email : ebrahimaymenzaki55@gmail.com
