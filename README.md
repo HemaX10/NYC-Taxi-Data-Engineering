@@ -9,7 +9,7 @@ The architecture includes:
 - **Data Loading**: Storing the processed data in a PostgreSQL database encapsulated within a Docker container.
 
 ## DBT Model
-![DBT Model](path/to/dbt-dag.png)
+![DBT Model](images/dbt-dag.png)
 
 The DBT model illustrates how staging and transformation tables are structured:
 - **Staging Tables**: `stg_green_tripdata`, `stg_yellow_tripdata`
