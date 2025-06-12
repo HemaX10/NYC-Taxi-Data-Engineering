@@ -1,7 +1,8 @@
+![Pipeline Diagram](images/Pipeline.png)
 The main reason for this project is to provide an automated data pipeline that addresses real-world data engineering challenges. By leveraging publicly available data, we can create actionable insights, focusing on key performance indicators like total trips, revenue, and customer behavior.
 
 ## Pipeline Architecture
-![Pipeline Diagram](images/Pipeline.png)
+
 
 The architecture includes:
 - **Data Extraction**: Using Airflow to automate the downloading and ingestion of data from the NYC Taxi dataset.
@@ -108,7 +109,8 @@ Since the fact table is large, materialized views were used to enhance performan
 Utilizing Ngrok and materialized views offers a free and cost-effective way to handle large datasets and provide insights efficiently, ensuring that budget constraints do not hinder data visualization.
 
 ## Dashboard
-![Dashboard First Page](dashboard/first page of dashboard.png)
+![Dashboard First Page](dashboard/first_page_of_dashboard.png)
+![Dashboard Second Page](dashboard/second_page_of_dashboard.png)
 
 ### [Dashboard Link](https://lookerstudio.google.com/reporting/ce5a09b7-291b-4fdd-bcbb-57205ba2ee8b)
 
