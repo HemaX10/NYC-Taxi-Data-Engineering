@@ -1,0 +1,67 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Docker
+.dockerignore
+Dockerfile* # Exclude Dockerfiles themselves if they aren't needed inside another build stage
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.hypothesis/
+.pytest_cache/
+# Virtual Environments - IMPORTANT
+.env
+.venv
+env/
+venv/
+ENV/
+VENV/
+
+# IDE / Editor specific
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Airflow specific - VERY IMPORTANT
+airflow/logs/
+airflow/temp/
+airflow/*.pid
+airflow/*.db # Exclude sqlite db if used locally and not needed in image
+
+# DBT specific - VERY IMPORTANT
+dbt/logs/
+dbt/target/
+dbt/dbt_packages/ # Usually managed by dbt deps, not needed in image directly unless intended
+
+# Large data files (if not needed in the build)
+*.sql
+*.csv
+*.parquet
+# Add specific large files if needed, e.g. !my_required_data.csv
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log

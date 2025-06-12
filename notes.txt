@@ -1,0 +1,95 @@
+There is a huge problem facing you which is making postgres and airflow not working well
+after it was doing good what I identified causing the problem that queries does not run and how ?
+when executing this query : 
+"SELECT blocked_locks.pid AS blocked_pid,
+       blocking_locks.pid AS blocking_pid,
+       blocked_activity.usename AS blocked_user,
+       blocking_activity.usename AS blocking_user,
+       blocked_activity.query AS blocked_statement,
+       blocking_activity.query AS current_statement_in_blocking_process
+FROM  pg_locks blocked_locks
+JOIN pg_stat_activity blocked_activity
+ON blocked_activity.pid = blocked_locks.pid
+JOIN pg_locks blocking_locks 
+ON blocking_locks.locktype = blocked_locks.locktype
+AND blocking_locks.database IS NOT DISTINCT FROM blocked_locks.database
+AND blocking_locks.relation IS NOT DISTINCT FROM blocked_locks.relation
+AND blocking_locks.page IS NOT DISTINCT FROM blocked_locks.page
+AND blocking_locks.tuple IS NOT DISTINCT FROM blocked_locks.tuple
+AND blocking_locks.virtualxid IS NOT DISTINCT FROM blocked_locks.virtualxid
+AND blocking_locks.transactionid IS NOT DISTINCT FROM blocked_locks.transactionid
+AND blocking_locks.classid IS NOT DISTINCT FROM blocked_locks.classid
+AND blocking_locks.objid IS NOT DISTINCT FROM blocked_locks.objid
+AND blocking_locks.objsubid IS NOT DISTINCT FROM blocked_locks.objsubid
+AND blocking_locks.pid != blocked_locks.pid
+JOIN pg_stat_activity blocking_activity
+ON blocking_activity.pid = blocking_locks.pid;" 
+
+SELECT pg_terminate_backend(blocking_pid);
+
+ac4e6788f2f13b2128e65098e9cb004e
+It retures 20 queries of merging data been executing , how I got to this point becuase this message in 
+postgres log "2025-05-06 09:12:32.014 UTC [1736] LOG: skipping vacuum of "green_staging" --- lock not available"
+which makes me to idnetify the problem , before I start solving it I just need to see why this happend
+to not making it happen again 
+
+Problemmmmmmmmmmmmmmm: !!!!!!!!!!!!!!!!!!!!!!
+problem : airflow stops saying that : """
+airflow.exceptions.AirflowException: Task received SIGTERM signal
+[2025-05-08, 15:37:51 UTC] {taskinstance.py:1398} INFO - Marking task as 
+FAILED. dag_id=ny_taxi_loader, task_id=fhv_group.process_fhv_2019_11, 
+execution_date=20250508T134349, start_date=20250508T153701, end_date=20250508T153751
+[2025-05-08, 15:37:52 UTC] {standard_task_runner.py:104} ERROR - Failed to execute 
+job 351 for task fhv_group.process_fhv_2019_11 (Task received SIGTERM signal; 1437)
+[2025-05-08, 15:37:52 UTC] {process_utils.py:79} INFO - Process psutil.Process
+(pid=1437, status='terminated', exitcode=1, started='15:31:12') (1437) terminated with
+exit code 1)) Then make task up for retry and makes all reties then no solution as expected 
+
+Solution : 
+add two paratmers in default args one is retry_delta and execution_timeout which both take time
+from timedelta , 
+What it is: retry_delay specifies the amount of time Airflow should wait before 
+attempting to run a task again after it has failed. 
+If a task instance fails, and there are retries remaining, 
+Airflow will wait for the duration specified by retry_delay before 
+scheduling the next attempt.
+
+Purpose:
+Handles transient issues: If a task fails due to a temporary problem 
+e.g., a network glitch, a database being briefly unavailable or overloaded, a rate limit), 
+retry_delay gives that external system or condition some time to recover before Airflow 
+tries again.
+Example: datetime.timedelta(minutes=5) means wait 5 minutes.
+
+What it is: execution_timeout specifies the maximum amount of time a single attempt of a task is allowed to run.
+
+What happens if it's exceeded
+Airflow sends a SIGTERM signal to the process running the task. This is a "polite" request for the task to shut down cleanly.
+The task instance is then marked as FAILED (or UP_FOR_RETRY if retries are still available).
+
+
+Purpose:
+Prevents runaway tasks: It stops tasks that are stuck in an infinite loop, 
+waiting indefinitely for a resource, or simply taking far longer than 
+expected from consuming resources (CPU, memory, worker slots) indefinitely.
+Maintains DAG health: Ensures that a single misbehaving task doesn't stall 
+an entire DAG or exhaust system resources.
+
+Example: datetime.timedelta(minutes=30)
+
+Problem : !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//// another problem I have faced which is docker takes a lot of context when he is been building and this takes a lot of time , lets try to solve it.
+ “”” transferring context: 14.18GB 1378.3s  “””
+•	What is "Context"? The build context is the set of files and directories located in the path specified by build.context in your docker-compose.yml (or the directory containing the Dockerfile if not specified). Docker sends all of this to the daemon before the build starts.
+And to solve this is issue we use .dockerignore which we but in it all things we do not use that docker takes it before start building
+
+
+
+Problem : !!!!!!!!!!!!
+Quires take so much time over all ETL 
+solution : run this inside SET maintenance_work_mem = '1GB';  
+change the wslconfing for docker to increase resources also make the same 
+for postgres inside docker compose yml using this line 
+command: postgres -c work_mem=512MB -c maintenance_work_mem=2GB -c shared_buffers=256MB -c statement_timeout=0 
+
+
