@@ -109,7 +109,7 @@ Utilizing Ngrok and materialized views offers a free and cost-effective way to h
 
 ## Dashboard
 ![Dashboard First Page](dashboard/first page of dashboard.png)
-![Dashboard Second Page](dashboard/second page of dashboard.png)
+
 ### [Dashboard Link](https://lookerstudio.google.com/reporting/ce5a09b7-291b-4fdd-bcbb-57205ba2ee8b)
 
 ## Contact Information
